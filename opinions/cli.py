@@ -1,7 +1,8 @@
 import os
-from  pathlib import Path
+from pathlib import Path
 
 from opinions import OpinionatedProject
+
 
 def main():
     project = OpinionatedProject(Path(os.getcwd()))

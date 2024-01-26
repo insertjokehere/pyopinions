@@ -18,13 +18,16 @@ pytest-ruff = "^0.2.1"
 mypy = "^1.8.0"
 pytest-mypy = "^0.10.3"
 
+# pytest
+pytest = "^7.4.4"
+
 [tool.poetry.scripts]
 opinions-apply = "opinions.cli:main"
 
 
 [tool.ruff]
 line-length = 120
-select = ["E4", "E7", "E9", "F", "UP", "S", "A"]
+select = ["E4", "E7", "E9", "F", "UP", "S", "A", "I"]
 
 [tool.pytest.ini_options]
 addopts = "--ruff --ruff-format --mypy"

@@ -1,10 +1,10 @@
-from typing import Any, Dict, Optional
-from pathlib import Path
-import subprocess
 import json
+from pathlib import Path
+from typing import Any, Dict, Optional
+
 import tomlkit
-from tomlkit.items import Item
 from tomlkit.container import Container
+from tomlkit.items import Item
 
 
 class TOMLFile:
@@ -12,11 +12,15 @@ class TOMLFile:
         self.path = Path(path)
         self._content: Optional[tomlkit.TOMLDocument] = None
         self._dirty = False
-        self._initial_content : Optional[str] = None
+        self._initial_content: Optional[str] = None
 
     @property
     def is_dirty(self) -> bool:
-        return self._dirty or (self._content is not None and self._initial_content is not None and tomlkit.dumps(self._content) != self._initial_content)
+        return self._dirty or (
+            self._content is not None
+            and self._initial_content is not None
+            and tomlkit.dumps(self._content) != self._initial_content
+        )
 
     @property
     def content(self) -> tomlkit.TOMLDocument:
@@ -29,7 +33,7 @@ class TOMLFile:
                 self._content = tomlkit.document()
                 self._initial_content = ""
         return self._content
-    
+
     def finalize(self) -> bool:
         wrote_out = False
         if self.is_dirty:
@@ -43,13 +47,13 @@ class TOMLFile:
         self._dirty = True
 
     def get_or_create_table(self, *path: str, is_super=False) -> tomlkit.TOMLDocument | Item | Container | Any:
-        table = self.content
+        table: Any = self.content
         for path_fragment in path:
-            if not path_fragment in table:
+            if path_fragment not in table:
                 table[path_fragment] = tomlkit.table(is_super_table=is_super)
             table = table[path_fragment]
         return table
-    
+
 
 class PyProjectTOMLFile(TOMLFile):
     def add_pytest_opt(self, option):
@@ -61,18 +65,21 @@ class PyProjectTOMLFile(TOMLFile):
             pytest_iniopts["addopts"] += " " + option
             pytest_iniopts["addopts"] = pytest_iniopts["addopts"].strip()
 
-    
+
 class JsonFile:
     def __init__(self, path: Path):
         self.path = Path(path)
         self._content: Optional[Any] = None
         self._dirty = False
-        self._initial_content : Optional[str] = None
-
+        self._initial_content: Optional[str] = None
 
     @property
     def is_dirty(self) -> bool:
-        return self._dirty or (self._content is not None and self._initial_content is not None and json.dumps(self._content) != self._initial_content)
+        return self._dirty or (
+            self._content is not None
+            and self._initial_content is not None
+            and json.dumps(self._content) != self._initial_content
+        )
 
     @property
     def content(self) -> Any:
@@ -85,7 +92,7 @@ class JsonFile:
                 self._content = {}
                 self._initial_content = ""
         return self._content
-    
+
     def finalize(self) -> bool:
         wrote_out = False
         if self.is_dirty:
@@ -97,26 +104,29 @@ class JsonFile:
 
     def mark_dirty(self):
         self._dirty = True
-        
+
 
 class OpinionatedProject:
     def __init__(self, base_path: str):
         self.base_path = Path(base_path)
-        self._toml_files = {}  # type: Dict[str, TOMLFile]
-        self._json_files = {} # type: Dict[str, JsonFile]
+        self._toml_files: Dict[str, TOMLFile] = {}
+        self._json_files: Dict[str, JsonFile] = {}
 
-        from opinions.opinion_ruff import RuffOpinion
         from opinions.opinion_mypy import MypyOpinion
+        from opinions.opinion_ruff import RuffOpinion
+        from opinions.opinion_ruff_vscode import RuffVSCodeOpinion
+
         self.opinions = [
             RuffOpinion(self),
             MypyOpinion(self),
+            RuffVSCodeOpinion(self),
         ]
-        
+
     def get_toml_file(self, path: str) -> TOMLFile:
         if path not in self._toml_files:
             self._toml_files[path] = TOMLFile(self.base_path / path)
         return self._toml_files[path]
-    
+
     def get_json_file(self, path: str) -> JsonFile:
         if path not in self._json_files:
             self._json_files[path] = JsonFile(self.base_path / path)
@@ -126,21 +136,26 @@ class OpinionatedProject:
     def pyproject(self) -> PyProjectTOMLFile:
         if "pyproject.toml" not in self._toml_files:
             self._toml_files["pyproject.toml"] = PyProjectTOMLFile(self.base_path / "pyproject.toml")
-        return self._toml_files["pyproject.toml"]
+        return self._toml_files["pyproject.toml"]  # type: ignore
 
     def can_manage_project(self) -> bool:
-        return (self.base_path / "pyproject.toml").exists() and "tool" in self.pyproject and "poetry" in self.pyproject["tool"]
-    
+        return (self.base_path / "pyproject.toml").exists()
+
     def finalize(self) -> bool:
         dirty = False
-        for _, file in self._toml_files.items():
-            f_dirty = file.finalize()
+        for _, toml_file in self._toml_files.items():
+            f_dirty = toml_file.finalize()
+            dirty = dirty or f_dirty
+        for _, json_file in self._json_files.items():
+            f_dirty = json_file.finalize()
             dirty = dirty or f_dirty
         return dirty
-    
+
     @property
     def is_dirty(self):
-        return any([x.is_dirty for x in self._toml_files.values()])
+        return any([x.is_dirty for x in self._toml_files.values()]) or any(
+            [x.is_dirty for x in self._json_files.values()]
+        )
 
 
 class Opinion:
