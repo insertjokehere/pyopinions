@@ -24,6 +24,8 @@ pytest = "^7.4.4"
 [tool.poetry.scripts]
 opinions = "opinions.cli:main"
 
+[tool.poetry.plugins]
+pytest11 = { opinions = "opinions.pytest_self_check" }
 
 [tool.ruff]
 line-length = 120

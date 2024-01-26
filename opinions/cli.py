@@ -20,7 +20,7 @@ def main():
 
 
 def check(args):
-    project = _prep_project(args)
+    project = prep_project()
     if project.is_dirty:
         print("Changes needed - run 'opinions apply' to fix")
         exit(1)
@@ -29,7 +29,7 @@ def check(args):
 
 
 def apply(args):
-    project = _prep_project(args)
+    project = prep_project()
     result = project.finalize()
     if result:
         print("Project configured!")
@@ -37,7 +37,7 @@ def apply(args):
         print("Nothing to do")
 
 
-def _prep_project(args) -> OpinionatedProject:
+def prep_project() -> OpinionatedProject:
     project = OpinionatedProject(Path(os.getcwd()))
     for opinion in project.opinions:
         opinion.apply_changes()
