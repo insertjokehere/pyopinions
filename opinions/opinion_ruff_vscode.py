@@ -6,6 +6,9 @@ from . import Opinion
 class RuffVSCodeOpinion(Opinion):
     def apply_changes(self) -> None:
         vscode_settings = self.project.get_json_file(".vscode/settings.json")
+
+        vscode_settings.content["mypy-type-checker.importStrategy"] = "fromEnvironment"
+
         if "[python]" not in vscode_settings.content:
             vscode_settings.content["[python]"] = {}
         python_settings = vscode_settings.content["[python]"]
@@ -22,4 +25,11 @@ class RuffVSCodeOpinion(Opinion):
         if "recommendations" not in extensions_config.content:
             extensions_config.content["recommendations"] = []
         recommendations: List[str] = extensions_config.content["recommendations"]
-        recommendations.append("charliermarsh.ruff")
+
+        for ext in [
+            "ms-python.python",
+            "charliermarsh.ruff",
+            "ms-python.mypy-type-checker",
+        ]:
+            if ext not in recommendations:
+                recommendations.append(ext)
