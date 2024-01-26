@@ -107,8 +107,8 @@ class JsonFile:
 
 
 class OpinionatedProject:
-    def __init__(self, base_path: str):
-        self.base_path = Path(base_path)
+    def __init__(self, base_path: Path):
+        self.base_path = base_path
         self._toml_files: Dict[str, TOMLFile] = {}
         self._json_files: Dict[str, JsonFile] = {}
 

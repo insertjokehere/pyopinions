@@ -22,7 +22,7 @@ pytest-mypy = "^0.10.3"
 pytest = "^7.4.4"
 
 [tool.poetry.scripts]
-opinions-apply = "opinions.cli:main"
+opinions = "opinions.cli:main"
 
 
 [tool.ruff]
