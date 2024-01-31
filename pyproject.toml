@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "opinions"
-version = "0.1.0"
+version = "0.0.0"
 description = "The correct way to configure your project"
 authors = ["William Hughes <will@willhughes.name>"]
 license = "Apache-2.0"
