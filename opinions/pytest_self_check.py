@@ -10,7 +10,7 @@ def pytest_collect_file(parent, file_path):
 
 class PyprojectFile(pytest.File):
     def collect(self):
-        yield PyprojectItem.from_parent(self, name="")
+        yield PyprojectItem.from_parent(self, name="opinions-check")
 
 
 class PyprojectItem(pytest.Item):

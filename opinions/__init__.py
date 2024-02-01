@@ -113,7 +113,6 @@ class OpinionatedProject:
         self._json_files: Dict[str, JsonFile] = {}
 
         from opinions.opinion_mypy import MypyOpinion
-        from opinions.opinion_pytest_self_check import PytestSelfCheckOpionion
         from opinions.opinion_ruff import RuffOpinion
         from opinions.opinion_ruff_vscode import RuffVSCodeOpinion
 
@@ -121,7 +120,6 @@ class OpinionatedProject:
             RuffOpinion(self),
             MypyOpinion(self),
             RuffVSCodeOpinion(self),
-            PytestSelfCheckOpionion(self),
         ]
 
     def get_toml_file(self, path: str) -> TOMLFile:
