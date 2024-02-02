@@ -9,6 +9,10 @@ class RuffVSCodeOpinion(Opinion):
 
         vscode_settings.content["mypy-type-checker.importStrategy"] = "fromEnvironment"
 
+        for setting in list(vscode_settings.content.keys()):
+            if setting.startswith("python.linting") or setting == "python.formatting.provider":
+                del vscode_settings.content[setting]
+
         if "[python]" not in vscode_settings.content:
             vscode_settings.content["[python]"] = {}
         python_settings = vscode_settings.content["[python]"]
