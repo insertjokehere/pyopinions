@@ -52,6 +52,7 @@ pytest
   * Recommend the [mypy](https://marketplace.visualstudio.com/items?itemName=ms-python.mypy-type-checker) integration extension be installed
   * Use ruff to format and organize imports on save
     * The ruff extension can also automatically fix some linter issues on save - this is explicitly _not_ enabled as part of the configuration, but can be enabled if you want
+* If the project is using Poetry, explicitly configure the PyPI repository if no other default source is configured
 
 ## Versioning and Compatibility
 
