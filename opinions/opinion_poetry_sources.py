@@ -3,9 +3,10 @@ from opinions import Opinion
 
 class PoetryExplicitSourcesOpinion(Opinion):
     def apply_changes(self):
-        sources = self.project.pyproject.content.get("tool", {}).get("poetry", {}).get("source", [])
-        if not sources:
+        if not self.is_poetry_project:
             return
+
+        sources = self.project.pyproject.content.get("tool", {}).get("poetry", {}).get("source", [])
 
         for source in sources:
             if "secondary" in source:
@@ -13,7 +14,11 @@ class PoetryExplicitSourcesOpinion(Opinion):
                     source["priority"] = "supplemental"
                 del source["secondary"]
 
+        for source in sources:
+            if source["priority"] == "default":
+                source["priority"] = "primary"
+
         if not any([x["name"].lower() == "pypi" for x in sources]) and not any(
-            [x.get("priority", "default") == "default" for x in sources]
+            [x.get("priority", "primary") == "primary" for x in sources]
         ):
-            sources.append({"name": "pypi", "priority": "default"})
+            sources.append({"name": "pypi", "priority": "primary"})

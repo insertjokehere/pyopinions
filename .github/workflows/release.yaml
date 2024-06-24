@@ -25,12 +25,10 @@ jobs:
       with:
         path: ./.venv
         key: venv-${{ hashFiles('poetry.lock') }}
-    - name: Set version
-      run: poetry version ${GITHUB_REF#refs/*/}
     - name: Poetry install
       run: poetry install
     - name: Build a binary wheel and a source tarball
-      run: poetry build
+      run: poetry run poe build
     - name: Store the distribution packages
       uses: actions/upload-artifact@v3
       with:

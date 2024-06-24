@@ -113,6 +113,8 @@ class OpinionatedProject:
         self._json_files: Dict[str, JsonFile] = {}
 
         from opinions.opinion_mypy import MypyOpinion
+        from opinions.opinion_pep517 import UsePEP517BuildOpinion
+        from opinions.opinion_poetry_dynamic_version import PoetryDynamicVersionOpinion
         from opinions.opinion_poetry_sources import PoetryExplicitSourcesOpinion
         from opinions.opinion_ruff import RuffOpinion
         from opinions.opinion_ruff_vscode import RuffVSCodeOpinion
@@ -122,6 +124,8 @@ class OpinionatedProject:
             MypyOpinion(self),
             RuffVSCodeOpinion(self),
             PoetryExplicitSourcesOpinion(self),
+            PoetryDynamicVersionOpinion(self),
+            UsePEP517BuildOpinion(self),
         ]
 
     def get_toml_file(self, path: str) -> TOMLFile:
@@ -166,3 +170,7 @@ class Opinion:
 
     def apply_changes(self):
         raise NotImplementedError()
+
+    def is_poetry_project(self) -> bool:
+        tools = self.project.pyproject.content.get("tool", {})
+        return "poetry" in tools.keys()
