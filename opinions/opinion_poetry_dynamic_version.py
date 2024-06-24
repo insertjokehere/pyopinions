@@ -14,3 +14,6 @@ class PoetryDynamicVersionOpinion(Opinion):
             "tool", "poetry-dynamic-versioning", is_super=True
         )
         tool_dynamic_version["enable"] = True
+
+        tool_poetry = self.project.pyproject.get_or_create_table("tool", "poetry", is_super=True)
+        tool_poetry["version"] = "0.0.0"
