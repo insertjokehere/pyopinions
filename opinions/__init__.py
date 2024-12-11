@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 import tomlkit
 from tomlkit.container import Container
@@ -109,8 +109,8 @@ class JsonFile:
 class OpinionatedProject:
     def __init__(self, base_path: Path):
         self.base_path = base_path
-        self._toml_files: Dict[str, TOMLFile] = {}
-        self._json_files: Dict[str, JsonFile] = {}
+        self._toml_files: dict[str, TOMLFile] = {}
+        self._json_files: dict[str, JsonFile] = {}
 
         from opinions.opinion_mypy import MypyOpinion
         from opinions.opinion_pep517 import UsePEP517BuildOpinion

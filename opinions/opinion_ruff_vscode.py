@@ -1,5 +1,3 @@
-from typing import List
-
 from . import Opinion
 
 
@@ -28,7 +26,7 @@ class RuffVSCodeOpinion(Opinion):
         extensions_config = self.project.get_json_file(".vscode/extensions.json")
         if "recommendations" not in extensions_config.content:
             extensions_config.content["recommendations"] = []
-        recommendations: List[str] = extensions_config.content["recommendations"]
+        recommendations: list[str] = extensions_config.content["recommendations"]
 
         for ext in [
             "ms-python.python",

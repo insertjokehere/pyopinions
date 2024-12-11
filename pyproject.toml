@@ -11,15 +11,15 @@ python = ">=3.10,<4"
 tomlkit = "^0.12.3"
 
 # ruff
-ruff = "^0.1.14"
-pytest-ruff = "^0.2.1"
+ruff = "^0.8.2"
+pytest-ruff = "^0.4.1"
 
 # mypy
-mypy = "^1.8.0"
+mypy = "^1.13.0"
 pytest-mypy = "^0.10.3"
 
 # pytest
-pytest = "^7.4.4"
+pytest = "^8.3.4"
 
 # dynamic versioning
 poetry-dynamic-versioning = "^1.4.0"
