@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [v2.0.0]
 
 ### [Changed]
 * Bump ruff (0.1.14 -> 0.8.2), pytest-ruff (0.2.1 -> 0.4.1), mypy (1.8.0 -> 1.13.0), pytest 7.4.(4 -> 8.3.4). The ruff upgrade changes some rules, and may cause linter failures unless they are corrected.
